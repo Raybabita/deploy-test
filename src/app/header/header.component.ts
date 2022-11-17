@@ -10,6 +10,7 @@ import {
 })
 export class HeaderComponent implements OnInit {
   menuType: string = 'default';
+  sellerName: string = '';
   constructor(private route: Router) { }
 
   ngOnInit(): void {
@@ -18,12 +19,22 @@ export class HeaderComponent implements OnInit {
         if (localStorage.getItem('sellerData') && val.url.includes('seller')) {
           console.log('In seller area')
           this.menuType = 'sellerData';
+          if (localStorage.getItem('sellerData')) {
+            let sellerStore = localStorage.getItem('sellerData');
+            let parsedSellerData = sellerStore && JSON.parse(sellerStore)[0];
+            this.sellerName = parsedSellerData.name;
+          }
         } else {
           console.log('outside seller area')
           this.menuType = 'default';
         }
       }
     })
+  }
+
+  logout() {
+    localStorage.removeItem("sellerData");
+    this.route.navigate(['/'])
   }
 
 }
